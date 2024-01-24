@@ -13,7 +13,7 @@ interface BaseItemAction {
 
 interface AddItemAction<T> extends BaseItemAction {
   type: 'add'
-  value: T
+  value?: T
 }
 
 interface UpdateItemAction<T> extends BaseItemAction {
@@ -42,20 +42,20 @@ interface ResetItemAction<T> extends BaseItemAction {
 interface UseAppendableOptions<T> {
   initialData?: T[]
   rowKey: keyof T
-  getValue: (data?: T) => T
+  getValue: (state: T[], data?: T) => T
 }
 function getReducer<T>(options: UseAppendableOptions<T>) {
-  const {initialData, getValue, rowKey} = options
+  const { getValue, rowKey} = options
   return (state: T[], action: AppendableItemAction<T>): T[] => {
     switch (action.type) {
       case 'add':
         const {value} = action
-        return [...state, options.getValue(value)]
+        return [...state, getValue(state, value)]
       case 'delete':
-        return state.filter((data) => data[options.rowKey] !== action.key)
+        return state.filter((data) => data[rowKey] !== action.key)
       case 'update':
         return state.map((item) => {
-          if (item[options.rowKey] === action.key) {
+          if (item[rowKey] === action.key) {
             return {
               ...item,
               [action.field]: action.value,
@@ -83,10 +83,10 @@ export function useAppendableData<T>(options: UseAppendableOptions<T>) {
 
   return {
     state,
-    addRow: () => {
+    addRow: (value?: T) => {
       dispatch({
         type: 'add',
-        value: options.getValue()
+        value
       })
     },
     deleteRow: (key: T[keyof T]) => {
@@ -95,13 +95,26 @@ export function useAppendableData<T>(options: UseAppendableOptions<T>) {
         key
       })
     },
-    updateData: (key: T[keyof T], field: string, value: any) => {
-
+    updateData: (key: T[keyof T], field: keyof T, value:T[keyof T]) => {
+      dispatch({
+        type: 'update',
+        key,
+        field,
+        value
+      })
     },
-    setData: (key: T[keyof T], data: T) => {
+    setData: (key: T[keyof T], item: T) => {
+      dispatch({
+        type: 'set',
+        key,
+        item
+      })
     },
-    loadData: () => {
-
+    resetData: (items: T[]) => {
+      dispatch({
+        type: 'reset',
+        items
+      })
     }
   }
 }
