@@ -1,9 +1,9 @@
-import React from 'react';
-import { CalendarOutlined, SettingOutlined } from '@ant-design/icons';
-import { Avatar, Layout, Menu, theme } from 'antd';
+import React from 'react'
+import { CalendarOutlined } from '@ant-design/icons'
+import { Layout, Menu, theme } from 'antd'
 import SchedulerApp from '../components/SchedulerApp'
 
-const {  Content, Sider } = Layout;
+const { Content, Sider } = Layout
 
 const items = [
   {

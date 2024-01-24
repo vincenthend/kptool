@@ -20,7 +20,7 @@ interface UpdateItemAction<T> extends BaseItemAction {
   type: 'update'
   key: T[keyof T]
   field: keyof T
-  value: T[keyof T]
+  value: T[keyof T] | null | undefined
 }
 
 interface DeleteItemAction<T> extends BaseItemAction {
@@ -95,7 +95,7 @@ export function useAppendableData<T>(options: UseAppendableOptions<T>) {
         key
       })
     },
-    updateData: (key: T[keyof T], field: keyof T, value:T[keyof T]) => {
+    updateData: (key: T[keyof T], field: keyof T, value?: T[keyof T] | null) => {
       dispatch({
         type: 'update',
         key,

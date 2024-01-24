@@ -2,9 +2,9 @@ import { Button, Col, Row, Select, SelectProps } from 'antd'
 import * as React from 'react'
 import { CloseCircleOutlined, LockOutlined } from '@ant-design/icons'
 
-enum SelectMode {
+export enum SelectMode {
   LOCK,
-  EXCLUDE
+  EXCLUDE,
 }
 
 function LockExcludeSelect(props: SelectProps) {
